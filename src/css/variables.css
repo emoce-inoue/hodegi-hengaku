@@ -1,0 +1,51 @@
+:root {
+  /* font */
+  --font-sans: 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', meiryo, sans-serif;
+  --base-text-unit: 16;
+  --rem-ratio: calc(1rem / var(--base-text-unit));
+  --font-normal: 400;
+  --font-medium: 500;
+  --font-bold: 700;
+  --leading-initial: 1;
+  --leading-tight: 1.3;
+  --leading-snug: 1.5;
+  --leading-normal: 1.7;
+  --leading-relaxed: 1.8;
+  --leading-loose: 2;
+  --tracking-tight: 0.02em;
+  --tracking-normal: 0.05em;
+  --tracking-medium: 0.07em;
+  --tracking-relaxed: 0.12em;
+
+  /* size */
+  --layout-width-min: 375;
+  --layout-width-max: 1440;
+  --fluid-ratio-min: calc(1 / var(--layout-width-min) * 100dvi);
+  --fluid-ratio-max: calc(1 / var(--layout-width-max) * 100dvi);
+  --aspect-video: 16/9;
+  --aspect-thumbnail: 1.91/1;
+  --rounded-xs: 2px;
+  --rounded-s: 4px;
+  --rounded-m: 8px;
+  --rounded-sl: 10px;
+  --rounded-l: 30px;
+
+  /* color */
+  --color-grayscale-0: #fff;
+  --color-grayscale-1000: #000;
+  --background-base: var(--color-grayscale-0);
+  --font-base: var(--color-grayscale-100);
+  --underline-base: color-mix(in srgb, currentcolor, transparent 40%);
+
+  /* z-index */
+  --back-z-index: -1;
+  --default-z-index: 1;
+  --front-z-index: 2;
+  --menu-z-index: 3;
+
+  /* motion time */
+  --speed-quick: 0.3s;
+  --speed-normal: 0.5s;
+  --speed-slow: 1s;
+  --speed-over-slow: 2s;
+}

@@ -1,0 +1,38 @@
+name: Lint Check
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run Prettier for formatting check
+        run: npm run format -- --check
+
+      - name: Run ESLint for JS linting
+        run: npm run lint:js
+
+      - name: Run StyleLint for CSS linting
+        run: npm run lint:css
+
+      - name: Run HTMLHint for HTML linting
+        run: npm run lint:html

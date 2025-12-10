@@ -1,0 +1,126 @@
+* {
+  box-sizing: border-box;
+  min-inline-size: 0;
+  border-width: 0;
+  border-style: solid;
+}
+
+:where(:root) {
+  background-color: var(--background-base);
+  color: var(--font-base);
+  font-family: var(--font-sans);
+  font-style: unset;
+  font-size: 100%;
+  font-weight: var(--font-bold);
+  font-feature-settings: 'pkna';
+  text-align: start;
+  letter-spacing: var(--tracking-normal);
+  line-height: var(--leading-normal);
+  text-spacing-trim: trim-start;
+  word-break: initial;
+  line-break: strict;
+  overflow-wrap: anywhere;
+  hyphens: auto;
+  /* stylelint-disable-next-line property-no-vendor-prefix */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+
+:where(body) {
+  min-block-size: 100svb;
+  margin: unset;
+}
+
+:where(h1, h2, h3, h4, h5, h6) {
+  margin-block: unset;
+  font-size: unset;
+}
+
+:where(:any-link) {
+  color: unset;
+  text-decoration-line: none;
+  text-decoration-thickness: from-font;
+  text-decoration-color: var(--underline-base);
+  text-underline-offset: 0.25em;
+}
+
+::file-selector-button,
+:where(button, label[for], select, [role='tab'], [role='button']) {
+  cursor: pointer;
+}
+
+::file-selector-button,
+:where(button) {
+  inline-size: fit-content;
+  touch-action: manipulation;
+}
+
+::file-selector-button,
+:where(button, input, select, textarea) {
+  padding: unset;
+  border-width: 1px;
+  border-color: transparent;
+  border-radius: unset;
+  background-color: unset;
+  color: unset;
+  font: unset;
+  vertical-align: middle;
+  letter-spacing: unset;
+  text-align: unset;
+  text-transform: unset;
+  appearance: unset;
+}
+
+:where(ul, ol) {
+  padding-inline-start: unset;
+  list-style-type: '';
+}
+
+:where(p, blockquote, figure, pre, address, ul, ol, dl) {
+  margin-block: unset;
+}
+
+:where(figure) {
+  margin-inline: unset;
+}
+
+:where(img, video, canvas, audio, iframe, embed, object) {
+  display: block flow;
+  vertical-align: middle;
+}
+
+:where(img, svg, video) {
+  max-inline-size: 100%;
+  block-size: auto;
+  object-fit: cover;
+}
+
+:where(dialog) {
+  overflow: unset;
+  inline-size: unset;
+  block-size: unset;
+  max-inline-size: unset;
+  max-block-size: unset;
+  padding: unset;
+  background-color: unset;
+  color: unset;
+}
+
+:where(em) {
+  font-style: normal;
+}
+
+:where(fieldset) {
+  margin: unset;
+  padding: unset;
+  border: unset;
+}
+
+:where(summary) {
+  list-style: none;
+}
+
+summary::-webkit-details-marker {
+  display: none;
+}
