@@ -1369,3 +1369,25 @@ export function formatNumber(num) {
   return num.toLocaleString('ja-JP');
 }
 
+// カウントアップアニメーション関数
+export const startCountUpAnimation = (targetElem, to, duration = 1000) => {
+  if (!targetElem) {
+    return;
+  }
+  
+  const from = 0;
+  const startTime = performance.now();
+  
+  const countUp = () => {
+    const elapsed = performance.now() - startTime;
+    const countValue = from + (elapsed / duration) * (to - from);
+    if (elapsed >= duration) {
+      targetElem.textContent = formatNumber(to);
+    } else {
+      targetElem.textContent = formatNumber(Math.floor(countValue));
+      requestAnimationFrame(countUp);
+    }
+  };
+  
+  requestAnimationFrame(countUp);
+};

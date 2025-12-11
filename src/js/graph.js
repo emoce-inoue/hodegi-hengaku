@@ -41,7 +41,6 @@ const loadImagePattern = (ctx, imageUrl) => {
     const timeout = setTimeout(() => {
       if (!resolved) {
         resolved = true;
-        console.error('画像の読み込みがタイムアウトしました:', imageUrl, '実際のURL:', img.src);
         imagePatternLoading = false;
         resolve(null);
       }
@@ -51,7 +50,6 @@ const loadImagePattern = (ctx, imageUrl) => {
       if (!resolved) {
         resolved = true;
         clearTimeout(timeout);
-        console.log('画像の読み込みが完了しました:', imageUrl);
         cachedImagePattern = ctx.createPattern(img, 'repeat');
         imagePatternLoading = false;
         resolve(cachedImagePattern);
@@ -61,14 +59,12 @@ const loadImagePattern = (ctx, imageUrl) => {
       if (!resolved) {
         resolved = true;
         clearTimeout(timeout);
-        console.error('画像の読み込みに失敗しました:', imageUrl, '実際のURL:', img.src, error);
         imagePatternLoading = false;
         resolve(null);
       }
     };
     // パスを試す: まず相対パス、次に絶対パス
     img.src = imageUrl;
-    console.log('画像を読み込み中:', imageUrl, '実際のURL:', img.src);
   });
 };
 
@@ -129,7 +125,6 @@ const drawConnectingLines = (chart, container, canvas, yearlyData, interestRate,
         });
         return;
       }
-      console.warn('graph-value-label__amount要素が見つかりません', { baseAmountElement, selectedAmountElement });
       return;
     }
     
@@ -141,7 +136,6 @@ const drawConnectingLines = (chart, container, canvas, yearlyData, interestRate,
         });
         return;
       }
-      console.warn('chartAreaが取得できません');
       return;
     }
     
@@ -157,7 +151,6 @@ const drawConnectingLines = (chart, container, canvas, yearlyData, interestRate,
         });
         return;
       }
-      console.warn('グラフポイントが取得できません', { basePoint, selectedPoint });
       return;
     }
     
@@ -188,9 +181,6 @@ const drawConnectingLines = (chart, container, canvas, yearlyData, interestRate,
     if (baseLength > 0 && !isNaN(baseAngle) && isFinite(baseLength) && isFinite(baseAngle)) {
       baseAmountElement.style.setProperty('--line-length', `${baseLength}px`, 'important');
       baseAmountElement.style.setProperty('--line-angle', `${baseAngle}deg`, 'important');
-      console.log('baseTotal線を設定:', { baseLength, baseAngle });
-    } else {
-      console.warn('baseTotal線の値が無効です:', { baseLength, baseAngle });
     }
     
     // selectedTotalの実線
@@ -212,9 +202,6 @@ const drawConnectingLines = (chart, container, canvas, yearlyData, interestRate,
     if (selectedLength > 0 && !isNaN(selectedAngle) && isFinite(selectedLength) && isFinite(selectedAngle)) {
       selectedAmountElement.style.setProperty('--line-length', `${selectedLength}px`, 'important');
       selectedAmountElement.style.setProperty('--line-angle', `${selectedAngle}deg`, 'important');
-      console.log('selectedTotal線を設定:', { selectedLength, selectedAngle });
-    } else {
-      console.warn('selectedTotal線の値が無効です:', { selectedLength, selectedAngle });
     }
   };
   
@@ -234,7 +221,6 @@ const drawConnectingLines = (chart, container, canvas, yearlyData, interestRate,
 export const drawGraph = async (canvas, interestRate, monthlyAmount, years) => {
   // Chart.jsが読み込まれているか確認
   if (!Chart) {
-    console.error('Chart.jsが読み込まれていません');
     return;
   }
 
@@ -277,7 +263,6 @@ export const drawGraph = async (canvas, interestRate, monthlyAmount, years) => {
   const yearlyData = getYearlyData(interestRate, monthlyAmount, years);
   
   if (!yearlyData || yearlyData.length === 0) {
-    console.error('グラフデータが取得できませんでした', { interestRate, monthlyAmount, years });
     return;
   }
   
@@ -286,7 +271,6 @@ export const drawGraph = async (canvas, interestRate, monthlyAmount, years) => {
   );
   
   if (!isFinite(maxValue) || maxValue <= 0) {
-    console.error('最大値が無効です', { maxValue, yearlyData });
     return;
   }
   
@@ -475,7 +459,6 @@ export const drawGraph = async (canvas, interestRate, monthlyAmount, years) => {
           // animationオブジェクトからchartを取得
           const currentChart = animation.chart;
           if (!currentChart) {
-            console.warn('chartが取得できません');
             return;
           }
           
@@ -499,7 +482,6 @@ export const drawGraph = async (canvas, interestRate, monthlyAmount, years) => {
             const currentInterestRate = currentChart.options.interestRate;
             
             if (!currentYearlyData || !currentInterestRate) {
-              console.warn('チャートのoptionsからyearlyDataまたはinterestRateが取得できません');
               return;
             }
             
@@ -570,16 +552,10 @@ export const drawGraph = async (canvas, interestRate, monthlyAmount, years) => {
   
   let imagePattern = null;
   for (const imagePath of possiblePaths) {
-    console.log('画像パスを試行:', imagePath);
     imagePattern = await loadImagePattern(ctx, imagePath);
     if (imagePattern) {
-      console.log('画像の読み込みに成功:', imagePath);
       break;
     }
-  }
-  
-  if (!imagePattern) {
-    console.warn('すべてのパスで画像の読み込みに失敗しました。画像が表示されない可能性があります。');
   }
   
   // 画像パターンプラグイン
@@ -654,11 +630,6 @@ export const drawGraph = async (canvas, interestRate, monthlyAmount, years) => {
       
       // 必須パラメータの検証
       if (!currentInterestRate || !currentYearlyData) {
-        console.warn('チャートのoptionsからinterestRateまたはyearlyDataが取得できません', {
-          interestRate: currentInterestRate,
-          yearlyData: currentYearlyData,
-          chartOptions: chart.options
-        });
         return;
       }
       
@@ -720,7 +691,6 @@ export const drawGraph = async (canvas, interestRate, monthlyAmount, years) => {
           
           // 座標の検証（NaNチェック）
           if (isNaN(baseY) || isNaN(selectedY) || isNaN(graphX)) {
-            console.warn('グラフポイントの座標が無効です。', { baseY, selectedY, graphX, basePoint, selectedPoint, selectedIndex, xScale: chart.scales.x });
             return;
           }
           
@@ -732,7 +702,6 @@ export const drawGraph = async (canvas, interestRate, monthlyAmount, years) => {
           
           // offsetの検証
           if (isNaN(offsetX) || isNaN(offsetY)) {
-            console.warn('オフセットが無効です。', { offsetX, offsetY, canvasRect, containerRect });
             return;
           }
           
@@ -761,7 +730,6 @@ export const drawGraph = async (canvas, interestRate, monthlyAmount, years) => {
           // 実線は.graph-value-label__amountの擬似要素として描画されるため、要素の作成は不要
           // 値の検証（NaNチェック）
           if (isNaN(baseY) || isNaN(selectedY) || isNaN(graphX) || isNaN(offsetX) || isNaN(offsetY) || !chartArea) {
-            console.warn('グラフの座標が無効です。線を描画できません。', { baseY, selectedY, graphX, offsetX, offsetY, chartArea });
             return;
           }
           

@@ -49,6 +49,7 @@
   --color-greenscale-600: #94D1C7;
   --color-greenscale-700: #5EDED5;
   --color-greenscale-800: #5BAEA1;
+  --color-greenscale-850: #27AC98;
   --color-greenscale-900: #49897F;
   --color-greenscale-1000: #44AD9D;
   --color-greenscale-1100: #11A59A;
@@ -56,6 +57,8 @@
   --color-bluescale-200: #3E8EB5;
   --color-yellowscale-100: #FDFCE2;
   --color-yellowscale-200: #E6E5C3;
+  --color-yellowscale-300: #FAFFBB;
+  --color-orangescale-50: #F8CD75;
   --color-orangescale-100: #F29E08;
   --color-brownscale-100: #6F6E6D;
   --background-base: var(--color-grayscale-0);

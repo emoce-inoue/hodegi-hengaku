@@ -2,17 +2,18 @@
 <html lang="ja">
   <head>
     <meta charset="UTF-8" />
-    <title>hoge</title>
-    <meta content="hoge" name="description" />
+    <meta name="robots" content="noindex, nofollow">
+    <title>初心者でもすぐわかる！かんたん資産シミュレーション</title>
+    <meta content="毎月いくら貯めれば将来どれだけ増えるかを、かんたんに確認できます。積立額と期間、利率を選ぶだけで、お金の増え方がグラフですぐにわかる、初心者向けの資産シミュレーションです。" name="description" />
     <meta content="width=device-width,initial-scale=1" name="viewport" />
-    <link href="hoge" rel="canonical" />
+    <link href="https://www.financial-agency.com/service/asset-simulation/" rel="canonical" />
     <!-- OGP -->
-    <meta content="hoge" property="og:url" />
-    <meta content="hoge" property="og:description" />
-    <meta content="hoge" property="og:site_name" />
-    <meta content="hoge" property="og:title" />
+    <meta content="https://www.financial-agency.com/service/asset-simulation/" property="og:url" />
+    <meta content="毎月いくら貯めれば将来どれだけ増えるかを、かんたんに確認できます。積立額と期間、利率を選ぶだけで、お金の増え方がグラフですぐにわかる、初心者向けの資産シミュレーションです。" property="og:description" />
+    <meta content="初心者でもすぐわかる！かんたん資産シミュレーション" property="og:site_name" />
+    <meta content="初心者でもすぐわかる！かんたん資産シミュレーション" property="og:title" />
     <meta content="website" property="og:type" />
-    <meta content="images/og-image.png" property="og:image" />
+    <meta content="images/og-image.jpg" property="og:image" />
     <meta content="ja_JP" property="og:locale" />
     <!-- favicon -->
     <link rel="shortcut icon" href="images/favicon.ico" />
@@ -25,12 +26,30 @@
   </head>
   <body>
     <main class="l-main">
+      <section class="l-mv">
+        <div class="l-mv__intro js-fade">
+          <div class="l-mv__intro-icon"><img src="images/mv-icon.webp" width="262" height="130" alt="グラフのイメージイラスト"></div>
+          <p class="l-mv__intro-text">“資産づくり”が見えてくる</p>
+        </div>
+        <div class="l-mv__title-wrapper js-fade">
+          <p class="l-mv__title-sub"><img src="images/mv-title.webp" width="1185" height="148" alt="あなたはどっち?"></p>
+          <h1 class="l-mv__title">お金の増やし方</h1>
+        </div>
+        <div class="l-mv__image js-fade"><img src="images/mv-image.webp" width="436" height="457" alt=""></div>
+      </section>
 
       <section class="l-simulation-wrapper">
         <div class="l-simulation-wrapper__inner">
-          <section class="l-simulation">
+          <div class="l-simulation__intro js-fade">
+            <div class="l-simulation__intro-icon"><img src="images/simulation-icon.webp" width="454" height="144" alt="simulation"></div>
+            <div class="l-simulation__intro-title-wrapper">
+            <p class="l-simulation__intro-text">自分の貯めたお金はいくらになる？</p>
+            <h2 class="l-simulation__intro-title">3秒｢お金を増やす｣<br>プチ体験</h2>
+          </div>
+          </div>
+          <section class="l-simulation js-fadeup">
             <h3 class="l-simulation__title">シミュレーション情報</h3>
-            <form class="l-simulation__form">
+            <form class="l-simulation__form" action="javascript:void(0);">
               <fieldset class="l-simulation__fieldset l-simulation__fieldset--monthly-amount">
                 <legend class="l-simulation__fieldset-legend">
                   <span class="l-simulation__fieldset-legend-icon">●</span>
@@ -89,40 +108,90 @@
           </section>
 
           <div id="simulation-result" class="l-simulation-result">
-            <div class="l-simulation-result__arrow"><img src="images/green-arrow.webp" width="566" height="130" alt="緑色の下矢印"></div>
+            <div class="l-simulation-result__arrow js-fadein"><img src="images/green-arrow.webp" width="566" height="130" alt="緑色の下矢印"></div>
+            <div class="js-fade animation-delay-slow">
             <div class="l-simulation-result__title">
-              <p class="l-simulation-result__title-text l-simulation-result__title-text--large"><span id="simulation-period" class="l-simulation-result__title-text-period">30</span>年間かけて</p>
-              <p class="l-simulation-result__title-text">毎月<span class="l-simulation-result__title-text-amount-wrapper"><span id="simulation-amount" class="l-simulation-result__title-text-amount">3</span>万円</span>ずつ積み立てた場合</p>
-            </div>
-            <div class="l-simulation-result__difference">
-              <p class="l-simulation-result__difference-text">利率の違いで増えるお金の差</p>
-              <div class="l-simulation-result__difference-amount"><p id="simulation-difference" class="l-simulation-result__difference-amount-number">2,196,916</p>円</div>
-            </div>
-            <div class="l-simulation-result__graph-wrapper">
-              <div id="simulation-graph-container" class="l-simulation-result__graph">
-                <canvas id="simulation-graph" class="l-simulation-result__graph-canvas"></canvas>
+                <p class="l-simulation-result__title-text l-simulation-result__title-text--large"><span id="simulation-period" class="l-simulation-result__title-text-period">30</span>年間かけて</p>
+                <p class="l-simulation-result__title-text">毎月<span class="l-simulation-result__title-text-amount-wrapper"><span id="simulation-amount" class="l-simulation-result__title-text-amount">3</span>万円</span>ずつ積み立てた場合</p>
               </div>
-            </div>
-            <div class="l-simulation-result__investment-amount">
-              <p class="l-simulation-result__investment-amount-text">投資元本</p>
-              <p class="l-simulation-result__investment-amount-text-ellipsis">・・・</p>
-              <div class="l-simulation-result__investment-amount-value-wrapper">
-                <span id="simulation-principal" class="l-simulation-result__investment-amount-value">5,040,000</span>
-                <div class="l-simulation-result__investment-amount-unit">円</div>
+              <div class="l-simulation-result__difference">
+                <p class="l-simulation-result__difference-text">利率の違いで増えるお金の差</p>
+                <div class="l-simulation-result__difference-amount"><p id="simulation-difference" class="l-simulation-result__difference-amount-number js-count-number" data-count-to="">2,196,916</p>円</div>
+              </div>
+              <div class="l-simulation-result__graph-wrapper">
+                <div id="simulation-graph-container" class="l-simulation-result__graph">
+                  <canvas id="simulation-graph" class="l-simulation-result__graph-canvas"></canvas>
+                </div>
+              </div>
+              <div class="l-simulation-result__investment-amount">
+                <p class="l-simulation-result__investment-amount-text">投資元本</p>
+                <p class="l-simulation-result__investment-amount-text-ellipsis">・・・</p>
+                <div class="l-simulation-result__investment-amount-value-wrapper">
+                  <span id="simulation-principal" class="l-simulation-result__investment-amount-value js-count-number">5,040,000</span>
+                  <div class="l-simulation-result__investment-amount-unit">円</div>
+                </div>
               </div>
             </div>
           </div>
 
-          <p class="l-simulation-result__caution">
-            本シミュレーションのいかなる内容も、将来の結果を予測し、保証するものではありません。
+          <p class="l-simulation-result__caution js-fade">
+            ※シミュレーション結果は“あくまで目安”であり、将来のお金の増え方を保証するものではありません。また、税金や手数料などは加味されていないため、実際の受取り金額とは異なる場合がございます。
             <br>
-            本シミュレーション及び掲載された情報を利用することで生じるいかなる損害(直接的、間接的を問わず)についても、当庁が責任を負うものではありません。実際の資産運用や投資判断に当たっては、必ずご自身の責任において最終的に判断してください。
+            ※本シミュレーションは、年利を12ヶ月で割った月利（＝単純月割り）で計算しています。また、利息はすべて期末に組み入れる方式で計算されています。
+            <br>
+            ※記載されている利率はあくまでも一例です。実際の利率や増え方は市場や商品の条件で変わります。
+            <br>
+            ※本ページは特定の投資や商品をすすめるものではありません。
+            <br>
+            ※算出方法はフィナンシャル・エージェンシー独自の計算ロジックによるものであり、実際の商品仕様や利息計算方法とは異なる場合があります。
           </p>
         </div>
+
+        <div class="l-wave l-wave--simulation"></div>
       </section>
 
+      <section class="l-consult-wrapper">
+        <div class="l-simulation-wrapper__inner l-consult-wrapper__inner">
+          <div class="l-simulation__intro js-fade">
+            <div class="l-simulation__intro-icon"><img src="images/simulation-icon.webp" width="454" height="144" alt="simulation"></div>
+            <div class="l-simulation__intro-title-wrapper">
+            <p class="l-simulation__intro-text">お金を増やす方法を知りたい</p>
+            <h2 class="l-simulation__intro-title">ご相談フォーム</h2>
+          </div>
+          </div>
+          <div class="js-fadeup">
+            <div class="formrun-embed" data-formrun-form="@fa-human-resources-YVlgEs3tIzYJBaBdTIYQ" data-formrun-redirect="true">
+          </div>
+          </div>
+        </div>
+        <div class="l-wave l-wave--footer"></div>
+      </section>
+
+      <footer class="l-footer">
+        <div class="l-footer__inner js-fade">
+          <div class="l-footer__top-button js-page-top">TOP</div>
+          <div class="l-footer__contents">
+            <div class="l-footer__logo-wrapper">
+              <figure class="l-footer__logo"><img src="images/logo.webp" width="1192" height="122" alt="FINANCIAL AGENCY"></figure>
+              <p class="l-footer__company">株式会社フィナンシャル・エージェンシー</p>
+            </div>
+            <ul class="l-footer__link-list">
+              <li class="l-footer__link-list-item"><a href="https://www.financial-agency.com/compliance/pesonalinfo/" target="_blank" rel="noopener" class="l-footer__link">個人情報保護方針</a></li>
+              <li class="l-footer__link-list-item"><a href="https://www.financial-agency.com/compliance/security/" target="_blank" rel="noopener" class="l-footer__link">情報セキュリティー基本方針</a></li>
+              <li class="l-footer__link-list-item"><a href="https://www.financial-agency.com/compliance/solicitation/" target="_blank" rel="noopener" class="l-footer__link">勧誘方針</a></li>
+            </ul>
+            <p class="l-footer__bottom-text">フィナンシャル・エージェンシーは、高度な情報セキュリティ体制を実現するため、情報セキュリティ管理の国際規格である情報セキュリティマネジメントシステム「ISO/IEC27001」および、プライバシーマーク「JIS Q 15001」の認証を取得しております。</p>
+            <div class="l-footer__privacy-icon-wrapper">
+              <figure class="l-footer__privacy-icon l-footer__privacy-icon--iso"><img src="images/iso.webp" width="490" height="348" alt="ASR ISMS AC isoiec27001"></figure>
+              <figure class="l-footer__privacy-icon l-footer__privacy-icon--privacy"><img src="images/privacy.webp" width="348" height="348" alt="大切にします プライバシー 10690072"></figure>
+            </div>
+          </div>
+          <p class="l-footer__copy">© FINANCIAL AGENCY, Inc.</p>
+        </div>
+      </footer>
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://sdk.form.run/js/v2/embed.js"></script>
   </body>
 </html>

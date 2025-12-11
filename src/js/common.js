@@ -1,4 +1,4 @@
-import { getSimulationData, formatNumber } from './price.js';
+import { getSimulationData, formatNumber, startCountUpAnimation } from './price.js';
 import { drawGraph } from './graph.js';
 
 (() => {
@@ -43,7 +43,6 @@ import { drawGraph } from './graph.js';
       }
 
       if (difference) {
-        difference.textContent = formatNumber(data.difference);
         // 10桁以上の場合にクラスを付与
         const digitCount = String(data.difference).length;
         if (digitCount >= 10) {
@@ -51,10 +50,15 @@ import { drawGraph } from './graph.js';
         } else {
           difference.classList.remove('l-simulation-result__difference-amount-number--large');
         }
+        // カウントアップアニメーションを開始
+        difference.textContent = '0';
+        startCountUpAnimation(difference, data.difference, 1500);
       }
 
       if (principal) {
-        principal.textContent = formatNumber(data.principal);
+        // カウントアップアニメーションを開始
+        principal.textContent = '0';
+        startCountUpAnimation(principal, data.principal, 1500);
       }
     };
 
@@ -110,3 +114,27 @@ import { drawGraph } from './graph.js';
   }
 })();
 
+// ページトップへスムーススクロール
+(() => {
+  const initPageTop = () => {
+    const pageTopButton = document.querySelector('.js-page-top');
+    
+    if (!pageTopButton) {
+      return;
+    }
+    
+    pageTopButton.addEventListener('click', (event) => {
+      event.preventDefault();
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+  };
+  
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initPageTop);
+  } else {
+    initPageTop();
+  }
+})();
