@@ -406,7 +406,7 @@ export const drawGraph = async (canvas, interestRate, monthlyAmount, years) => {
             callback: (value) => {
               return String(value);
             },
-            padding: 5, // ティックラベルのパディング（左右の余白）
+            padding: 10, // ティックラベルのパディング（左右の余白）
             font: {
               size: 10, // フォントサイズ（調整可能）
             },
