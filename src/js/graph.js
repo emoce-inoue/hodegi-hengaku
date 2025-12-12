@@ -339,9 +339,10 @@ export const drawGraph = async (canvas, interestRate, monthlyAmount, years) => {
     options: {
       responsive: true,
       maintainAspectRatio: true,
-      // interestRateとyearlyDataをoptionsに保存してプラグインから参照できるようにする
+      // interestRate、yearlyData、yearsをoptionsに保存してプラグインから参照できるようにする
       interestRate: interestRate,
       yearlyData: yearlyData,
+      years: years,
       layout: {
         padding: {
           left: 5, // Y軸ラベルの幅を確保
@@ -477,11 +478,12 @@ export const drawGraph = async (canvas, interestRate, monthlyAmount, years) => {
               return;
             }
             
-            // チャートのoptionsから最新のyearlyDataとinterestRateを取得
+            // チャートのoptionsから最新のyearlyData、interestRate、yearsを取得
             const currentYearlyData = currentChart.options.yearlyData;
             const currentInterestRate = currentChart.options.interestRate;
+            const currentYears = currentChart.options.years;
             
-            if (!currentYearlyData || !currentInterestRate) {
+            if (!currentYearlyData || !currentInterestRate || !currentYears) {
               return;
             }
             
@@ -495,7 +497,7 @@ export const drawGraph = async (canvas, interestRate, monthlyAmount, years) => {
               // 必要なデータを取得
               const baseMeta = currentChart.getDatasetMeta(1);
               const selectedMeta = currentChart.getDatasetMeta(2);
-              const selectedIndex = Math.min(years, baseMeta.data.length - 1, selectedMeta.data.length - 1);
+              const selectedIndex = Math.min(currentYears, baseMeta.data.length - 1, selectedMeta.data.length - 1);
               const basePoint = baseMeta.data[selectedIndex];
               const selectedPoint = selectedMeta.data[selectedIndex];
               
@@ -509,7 +511,7 @@ export const drawGraph = async (canvas, interestRate, monthlyAmount, years) => {
                   currentCanvas,
                   currentYearlyData,
                   currentInterestRate,
-                  years,
+                  currentYears,
                   baseLabel,
                   selectedLabel,
                   null,
@@ -624,12 +626,13 @@ export const drawGraph = async (canvas, interestRate, monthlyAmount, years) => {
   const selectedYearValuePlugin = {
     id: 'selectedYearValue',
     afterDraw: (chart) => {
-      // チャートのoptionsから最新のinterestRateとyearlyDataを取得（フォールバックなし）
+      // チャートのoptionsから最新のinterestRate、yearlyData、yearsを取得（フォールバックなし）
       const currentInterestRate = chart.options.interestRate;
       const currentYearlyData = chart.options.yearlyData;
+      const currentYears = chart.options.years;
       
       // 必須パラメータの検証
-      if (!currentInterestRate || !currentYearlyData) {
+      if (!currentInterestRate || !currentYearlyData || !currentYears) {
         return;
       }
       
@@ -655,17 +658,40 @@ export const drawGraph = async (canvas, interestRate, monthlyAmount, years) => {
         existingLines.forEach((line) => line.remove());
       }
       
-      // 選択年数のインデックスを取得（yearlyDataは0年目を含むので、yearsがそのままインデックス）
+      // 選択年数のインデックスを取得（yearlyDataは0年目を含むので、currentYearsがそのままインデックス）
       // ただし、Chart.jsのメタデータは実際に描画されるポイントのみを含むため、
       // 最後のデータポイントのインデックスを使用する
-      const selectedIndex = Math.min(years, baseMeta.data.length - 1, selectedMeta.data.length - 1);
+      const selectedIndex = Math.min(currentYears, baseMeta.data.length - 1, selectedMeta.data.length - 1);
       
       if (selectedIndex >= 0 && selectedIndex < baseMeta.data.length && selectedIndex < selectedMeta.data.length) {
         const basePoint = baseMeta.data[selectedIndex];
         const selectedPoint = selectedMeta.data[selectedIndex];
         
-        // yearlyDataのインデックスも調整（yearlyDataは0年目を含むため）
-        const yearlyDataIndex = Math.min(years, currentYearlyData.length - 1);
+        // yearlyDataのインデックスを計算（yearlyDataは0年目を含むため、最終年のインデックスはcurrentYears）
+        // yearlyDataから最終年のデータを取得（yearプロパティで検索）
+        let yearlyDataIndex = -1;
+        for (let i = currentYearlyData.length - 1; i >= 0; i--) {
+          if (currentYearlyData[i] && currentYearlyData[i].year === currentYears) {
+            yearlyDataIndex = i;
+            break;
+          }
+        }
+        
+        // 見つからない場合は最後の要素を使用
+        if (yearlyDataIndex === -1) {
+          yearlyDataIndex = currentYearlyData.length - 1;
+        }
+        
+        // yearlyDataIndexが有効な範囲内か確認
+        if (yearlyDataIndex < 0 || yearlyDataIndex >= currentYearlyData.length) {
+          return;
+        }
+        
+        // 最終年のデータが存在するか確認
+        const finalYearData = currentYearlyData[yearlyDataIndex];
+        if (!finalYearData || finalYearData.year !== currentYears) {
+          return;
+        }
         
         if (basePoint && selectedPoint) {
           // 積み上げチャートでは、各ポイントのY座標が積み上げられた位置になる
@@ -685,7 +711,7 @@ export const drawGraph = async (canvas, interestRate, monthlyAmount, years) => {
               graphX = xScale.getPixelForValue(yearValue);
             } else if (xScale) {
               // year値が取得できない場合は最終年の値から取得
-              graphX = xScale.getPixelForValue(years);
+              graphX = xScale.getPixelForValue(currentYears);
             }
           }
           
