@@ -734,8 +734,6 @@ export const drawGraph = async (canvas, interestRate, monthlyAmount, years) => {
           const labelMargin = 10; // グラフエリアからのマージン
           const labelX = offsetX + chartArea.left + labelMargin;
 
-          // コンテナの高さを取得して、パーセンテージ位置を計算
-          const containerHeight = currentContainer.offsetHeight || chart.height;
           const baseLabelYPercent = 35;
 
           // 金額ラベルの位置を更新（グラフエリアの左側、35%の位置に固定）
