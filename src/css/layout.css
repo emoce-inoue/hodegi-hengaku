@@ -47,7 +47,6 @@
   font-size: calc(12 * var(--rem-ratio));
   font-weight: var(--font-normal);
   appearance: none;
-  -webkit-appearance: none;
 }
 
 .l-simulation__select-wrapper {
@@ -65,6 +64,7 @@
   background: var(--bottom-arrow) no-repeat center / contain;
   translate: 0 -50%;
 }
+
 .l-simulation__select-wrapper--half::after {
   inset-inline-end: calc((30 / 233) * 100%);
   inline-size: calc((15 / 233) * 100%);
@@ -110,7 +110,10 @@
   background-color: var(--color-greenscale-1100);
   color: var(--color-grayscale-0);
   border-radius: var(--rounded-infinity);
-  box-shadow: 0 6px 13px 0 var(--color-grayscale-200), inset -3px -3px 7px var(--color-greenscale-900), inset 3px 3px 5px var(--color-greenscale-700);
+  box-shadow:
+    0 6px 13px 0 var(--color-grayscale-200),
+    inset -3px -3px 7px var(--color-greenscale-900),
+    inset 3px 3px 5px var(--color-greenscale-700);
   font-size: calc(13 * var(--rem-ratio));
   font-family: var(--font-zenmaru);
   text-align: center;
@@ -120,7 +123,7 @@
   text-align: center;
 }
 
-.l-simulation__button-submit:after {
+.l-simulation__button-submit::after {
   content: '';
   position: absolute;
   inset-block-start: 50%;
@@ -239,6 +242,12 @@
 .l-simulation-result__graph {
   aspect-ratio: 535 / 420;
   margin-inline: auto;
+  position: relative;
+
+  --graph-line-start-offset-x: 10px;
+  --graph-line-start-offset-y: 0;
+  --graph-line-end-offset-x: 0;
+  --graph-line-end-offset-y: 0;
 }
 
 .l-simulation-result__graph-canvas {
@@ -247,9 +256,6 @@
 }
 
 /* グラフ */
-.l-simulation-result__graph {
-  position: relative;
-}
 
 .graph-value-label {
   position: absolute;
@@ -289,16 +295,16 @@
   position: absolute;
   left: 100%;
   bottom: -0.7px;
-  width: var(--line-length, 0px);
+  width: var(--line-length, 0);
   height: 0.75px;
-  background-color: currentColor;
+  background-color: currentcolor;
   transform-origin: left center;
   transform: rotate(var(--line-angle, 0deg));
   opacity: 0;
   transition: opacity 0.2s;
 }
 
-.graph-value-label__amount[style*="--line-length"]::after {
+.graph-value-label__amount[style*='--line-length']::after {
   opacity: 1;
 }
 
@@ -320,13 +326,6 @@
 
 .graph-value-label__unit {
   font-size: calc(12 * var(--rem-ratio));
-}
-
-.l-simulation-result__graph {
-  --graph-line-start-offset-x: 10px;
-  --graph-line-start-offset-y: 0px;
-  --graph-line-end-offset-x: 0px;
-  --graph-line-end-offset-y: 0px;
 }
 
 .l-mv {
