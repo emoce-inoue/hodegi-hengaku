@@ -18,7 +18,7 @@ const loadImagePattern = (ctx, imageUrl) => {
       resolve(cachedImagePattern);
       return;
     }
-    
+
     if (imagePatternLoading) {
       // 既に読み込み中の場合は、読み込み完了を待つ
       const checkInterval = setInterval(() => {
@@ -32,11 +32,11 @@ const loadImagePattern = (ctx, imageUrl) => {
       }, 50);
       return;
     }
-    
+
     imagePatternLoading = true;
     const img = new Image();
     let resolved = false;
-    
+
     // タイムアウトを設定（3秒）
     const timeout = setTimeout(() => {
       if (!resolved) {
@@ -45,7 +45,7 @@ const loadImagePattern = (ctx, imageUrl) => {
         resolve(null);
       }
     }, 3000);
-    
+
     img.onload = () => {
       if (!resolved) {
         resolved = true;
@@ -116,7 +116,7 @@ const drawConnectingLines = (chart, container, canvas, yearlyData, interestRate,
   const trySetLines = (retryCount = 0) => {
     const baseAmountElement = baseLabel.querySelector('.graph-value-label__amount');
     const selectedAmountElement = selectedLabel.querySelector('.graph-value-label__amount');
-    
+
     if (!baseAmountElement || !selectedAmountElement) {
       if (retryCount < 10) {
         // 最大10回まで再試行（500msまで）
@@ -127,7 +127,7 @@ const drawConnectingLines = (chart, container, canvas, yearlyData, interestRate,
       }
       return;
     }
-    
+
     const chartArea = chart.chartArea;
     if (!chartArea) {
       if (retryCount < 10) {
@@ -138,12 +138,12 @@ const drawConnectingLines = (chart, container, canvas, yearlyData, interestRate,
       }
       return;
     }
-    
+
     const baseMeta = chart.getDatasetMeta(1);
     const selectedMeta = chart.getDatasetMeta(2);
     const basePoint = baseMeta?.data[selectedIndex];
     const selectedPoint = selectedMeta?.data[selectedIndex];
-    
+
     if (!basePoint || !selectedPoint) {
       if (retryCount < 10) {
         requestAnimationFrame(() => {
@@ -153,58 +153,58 @@ const drawConnectingLines = (chart, container, canvas, yearlyData, interestRate,
       }
       return;
     }
-    
+
     const baseAmountRect = baseAmountElement.getBoundingClientRect();
     const selectedAmountRect = selectedAmountElement.getBoundingClientRect();
     const containerRect = container.getBoundingClientRect();
     const canvasRect = canvas.getBoundingClientRect();
-    
+
     const currentOffsetX = canvasRect.left - containerRect.left;
     const currentOffsetY = canvasRect.top - containerRect.top;
-    
+
     // baseTotalの実線
     // グラフの先端の座標（コンテナからの相対位置）
     const baseGraphPointX = currentOffsetX + basePoint.x;
     const baseGraphPointY = currentOffsetY + basePoint.y;
-    
+
     // ボーダーの右端の座標（コンテナからの相対位置）
     const baseLineStartXAbsolute = baseAmountRect.right - containerRect.left;
     const baseLineYAbsolute = baseAmountRect.bottom - containerRect.top;
-    
+
     // 距離と角度を計算（ボーダーの右端からグラフの先端まで）
     const baseDeltaX = baseGraphPointX - baseLineStartXAbsolute;
     const baseDeltaY = baseGraphPointY - baseLineYAbsolute;
     const baseLength = Math.sqrt(baseDeltaX * baseDeltaX + baseDeltaY * baseDeltaY);
     const baseAngle = Math.atan2(baseDeltaY, baseDeltaX) * (180 / Math.PI);
-    
+
     // CSS変数で位置と角度を設定（値が有効な場合のみ）
     if (baseLength > 0 && !isNaN(baseAngle) && isFinite(baseLength) && isFinite(baseAngle)) {
       baseAmountElement.style.setProperty('--line-length', `${baseLength}px`, 'important');
       baseAmountElement.style.setProperty('--line-angle', `${baseAngle}deg`, 'important');
     }
-    
+
     // selectedTotalの実線
     // グラフの先端の座標（コンテナからの相対位置）
     const selectedGraphPointX = currentOffsetX + selectedPoint.x;
     const selectedGraphPointY = currentOffsetY + selectedPoint.y;
-    
+
     // ボーダーの右端の座標（コンテナからの相対位置）
     const selectedLineStartXAbsolute = selectedAmountRect.right - containerRect.left;
     const selectedLineYAbsolute = selectedAmountRect.bottom - containerRect.top;
-    
+
     // 距離と角度を計算（ボーダーの右端からグラフの先端まで）
     const selectedDeltaX = selectedGraphPointX - selectedLineStartXAbsolute;
     const selectedDeltaY = selectedGraphPointY - selectedLineYAbsolute;
     const selectedLength = Math.sqrt(selectedDeltaX * selectedDeltaX + selectedDeltaY * selectedDeltaY);
     const selectedAngle = Math.atan2(selectedDeltaY, selectedDeltaX) * (180 / Math.PI);
-    
+
     // CSS変数で位置と角度を設定（値が有効な場合のみ）
     if (selectedLength > 0 && !isNaN(selectedAngle) && isFinite(selectedLength) && isFinite(selectedAngle)) {
       selectedAmountElement.style.setProperty('--line-length', `${selectedLength}px`, 'important');
       selectedAmountElement.style.setProperty('--line-angle', `${selectedAngle}deg`, 'important');
     }
   };
-  
+
   // 最初の試行を開始
   requestAnimationFrame(() => {
     setTimeout(() => trySetLines(0), 50);
@@ -254,26 +254,24 @@ export const drawGraph = async (canvas, interestRate, monthlyAmount, years) => {
   // Canvasの実際のサイズを設定（高DPI対応）
   canvas.width = width * dpr;
   canvas.height = height * dpr;
-  
+
   // Canvasの表示サイズを設定（CSSのaspect-ratioに任せるため、heightは設定しない）
   canvas.style.width = `${width}px`;
   // heightはCSSのaspect-ratioで自動計算されるため、設定しない
 
   // データを取得
   const yearlyData = getYearlyData(interestRate, monthlyAmount, years);
-  
+
   if (!yearlyData || yearlyData.length === 0) {
     return;
   }
-  
-  const maxValue = Math.max(
-    ...yearlyData.map((d) => Math.max(d.baseTotal, d.selectedTotal))
-  );
-  
+
+  const maxValue = Math.max(...yearlyData.map((d) => Math.max(d.baseTotal, d.selectedTotal)));
+
   if (!isFinite(maxValue) || maxValue <= 0) {
     return;
   }
-  
+
   const yAxis = calculateYAxis(maxValue);
   // yAxis.maxをstepの倍数に丸める（Chart.jsが自動で追加ティックを生成しないようにする）
   yAxis.max = Math.ceil(yAxis.max / yAxis.step) * yAxis.step;
@@ -288,7 +286,7 @@ export const drawGraph = async (canvas, interestRate, monthlyAmount, years) => {
     const principalY = d.principal / 10000; // 万円単位
     const baseTotalY = d.baseTotal / 10000; // 2%の税引後元利合計（万円単位）
     const selectedTotalY = d.selectedTotal / 10000; // 選択利率の税引後元利合計（万円単位）
-    
+
     principalData.push({ x: d.year, y: principalY });
     // baseTotalはprincipalの上に積み上げるため、差分を計算
     baseTotalData.push({ x: d.year, y: baseTotalY - principalY });
@@ -462,13 +460,13 @@ export const drawGraph = async (canvas, interestRate, monthlyAmount, years) => {
           if (!currentChart) {
             return;
           }
-          
+
           // コンテナから直接要素を取得（クロージャーの問題を回避）
           const checkAndDraw = (retryCount = 0) => {
             // チャートから最新のcanvasとcontainerを取得
             const currentCanvas = currentChart.canvas;
             const currentContainer = currentCanvas?.parentElement;
-            
+
             if (!currentContainer) {
               if (retryCount < 20) {
                 requestAnimationFrame(() => {
@@ -477,21 +475,21 @@ export const drawGraph = async (canvas, interestRate, monthlyAmount, years) => {
               }
               return;
             }
-            
+
             // チャートのoptionsから最新のyearlyData、interestRate、yearsを取得
             const currentYearlyData = currentChart.options.yearlyData;
             const currentInterestRate = currentChart.options.interestRate;
             const currentYears = currentChart.options.years;
-            
+
             if (!currentYearlyData || !currentInterestRate || !currentYears) {
               return;
             }
-            
+
             const baseLabel = currentContainer.querySelector('.graph-value-label--base');
             const selectedLabel = currentContainer.querySelector('.graph-value-label--selected');
             const baseAmountElement = baseLabel?.querySelector('.graph-value-label__amount');
             const selectedAmountElement = selectedLabel?.querySelector('.graph-value-label__amount');
-            
+
             // 要素が存在することを確認
             if (baseAmountElement && selectedAmountElement && currentChart.chartArea) {
               // 必要なデータを取得
@@ -500,28 +498,12 @@ export const drawGraph = async (canvas, interestRate, monthlyAmount, years) => {
               const selectedIndex = Math.min(currentYears, baseMeta.data.length - 1, selectedMeta.data.length - 1);
               const basePoint = baseMeta.data[selectedIndex];
               const selectedPoint = selectedMeta.data[selectedIndex];
-              
+
               if (basePoint && selectedPoint) {
                 const baseY = basePoint.y;
                 const selectedY = selectedPoint.y;
-                
-                drawConnectingLines(
-                  currentChart,
-                  currentContainer,
-                  currentCanvas,
-                  currentYearlyData,
-                  currentInterestRate,
-                  currentYears,
-                  baseLabel,
-                  selectedLabel,
-                  null,
-                  null,
-                  baseY,
-                  selectedY,
-                  selectedIndex,
-                  0,
-                  0
-                );
+
+                drawConnectingLines(currentChart, currentContainer, currentCanvas, currentYearlyData, currentInterestRate, currentYears, baseLabel, selectedLabel, null, null, baseY, selectedY, selectedIndex, 0, 0);
               }
             } else if (retryCount < 20) {
               // 要素がまだ存在しない場合は再試行（最大20回、約1秒）
@@ -546,12 +528,8 @@ export const drawGraph = async (canvas, interestRate, monthlyAmount, years) => {
   const ctx = canvas.getContext('2d');
   // 画像パス: HTMLファイルからの相対パス（webpackでdist/images/にコピーされる）
   // 複数のパスを試す
-  const possiblePaths = [
-    'images/border-bg.webp',
-    './images/border-bg.webp',
-    '/images/border-bg.webp',
-  ];
-  
+  const possiblePaths = ['images/border-bg.webp', './images/border-bg.webp', '/images/border-bg.webp'];
+
   let imagePattern = null;
   for (const imagePath of possiblePaths) {
     imagePattern = await loadImagePattern(ctx, imagePath);
@@ -559,35 +537,35 @@ export const drawGraph = async (canvas, interestRate, monthlyAmount, years) => {
       break;
     }
   }
-  
+
   // 画像パターンプラグイン
   const imagePatternPlugin = {
     id: 'imagePattern',
     afterDatasetsDraw: (chart) => {
       const ctx = chart.ctx;
       const meta = chart.getDatasetMeta(0); // 元本のメタデータ
-      
+
       if (meta && meta.data.length > 0 && cachedImagePattern) {
         ctx.save();
         ctx.fillStyle = cachedImagePattern;
         ctx.globalCompositeOperation = 'source-over';
-        
+
         // 元本エリアを描画
         const points = meta.data;
         if (points.length > 0) {
           ctx.beginPath();
           ctx.moveTo(points[0].x, chart.chartArea.bottom);
-          
+
           points.forEach((point) => {
             ctx.lineTo(point.x, point.y);
           });
-          
+
           const lastPoint = points[points.length - 1];
           ctx.lineTo(lastPoint.x, chart.chartArea.bottom);
           ctx.closePath();
           ctx.fill();
         }
-        
+
         ctx.restore();
       }
     },
@@ -600,24 +578,24 @@ export const drawGraph = async (canvas, interestRate, monthlyAmount, years) => {
       const ctx = chart.ctx;
       const chartArea = chart.chartArea;
       const yScale = chart.scales.y;
-      
+
       if (!chartArea || !yScale) {
         return;
       }
-      
+
       ctx.save();
       ctx.font = '12px sans-serif';
       ctx.fillStyle = '#666666';
-      
+
       // 最上部のティックの位置を取得
       const maxTickValue = yScale.max;
       const maxTickY = yScale.getPixelForValue(maxTickValue);
-      
+
       // 最上部の金額ラベルの上に「(万円)」を表示（改行のイメージ）
       ctx.textAlign = 'right';
       ctx.textBaseline = 'bottom';
       ctx.fillText('(万円)', chartArea.left - 10, maxTickY - 15);
-      
+
       ctx.restore();
     },
   };
@@ -630,24 +608,24 @@ export const drawGraph = async (canvas, interestRate, monthlyAmount, years) => {
       const currentInterestRate = chart.options.interestRate;
       const currentYearlyData = chart.options.yearlyData;
       const currentYears = chart.options.years;
-      
+
       // 必須パラメータの検証
       if (!currentInterestRate || !currentYearlyData || !currentYears) {
         return;
       }
-      
+
       // チャートから最新のcanvasとcontainerを取得
       const currentCanvas = chart.canvas;
       const currentContainer = currentCanvas?.parentElement;
-      
+
       const chartArea = chart.chartArea;
       const baseMeta = chart.getDatasetMeta(1); // 2%利率のメタデータ
       const selectedMeta = chart.getDatasetMeta(2); // 選択利率のメタデータ
-      
+
       if (!chartArea || !baseMeta || !selectedMeta || baseMeta.data.length === 0 || !currentContainer) {
         return;
       }
-      
+
       // 既存の金額表示要素を削除（プラグインが複数回呼ばれる可能性があるため）
       const existingLabels = currentContainer.querySelectorAll('.graph-value-label');
       if (existingLabels.length > 0) {
@@ -657,16 +635,16 @@ export const drawGraph = async (canvas, interestRate, monthlyAmount, years) => {
       if (existingLines.length > 0) {
         existingLines.forEach((line) => line.remove());
       }
-      
+
       // 選択年数のインデックスを取得（yearlyDataは0年目を含むので、currentYearsがそのままインデックス）
       // ただし、Chart.jsのメタデータは実際に描画されるポイントのみを含むため、
       // 最後のデータポイントのインデックスを使用する
       const selectedIndex = Math.min(currentYears, baseMeta.data.length - 1, selectedMeta.data.length - 1);
-      
+
       if (selectedIndex >= 0 && selectedIndex < baseMeta.data.length && selectedIndex < selectedMeta.data.length) {
         const basePoint = baseMeta.data[selectedIndex];
         const selectedPoint = selectedMeta.data[selectedIndex];
-        
+
         // yearlyDataのインデックスを計算（yearlyDataは0年目を含むため、最終年のインデックスはcurrentYears）
         // yearlyDataから最終年のデータを取得（yearプロパティで検索）
         let yearlyDataIndex = -1;
@@ -676,30 +654,30 @@ export const drawGraph = async (canvas, interestRate, monthlyAmount, years) => {
             break;
           }
         }
-        
+
         // 見つからない場合は最後の要素を使用
         if (yearlyDataIndex === -1) {
           yearlyDataIndex = currentYearlyData.length - 1;
         }
-        
+
         // yearlyDataIndexが有効な範囲内か確認
         if (yearlyDataIndex < 0 || yearlyDataIndex >= currentYearlyData.length) {
           return;
         }
-        
+
         // 最終年のデータが存在するか確認
         const finalYearData = currentYearlyData[yearlyDataIndex];
         if (!finalYearData || finalYearData.year !== currentYears) {
           return;
         }
-        
+
         if (basePoint && selectedPoint) {
           // 積み上げチャートでは、各ポイントのY座標が積み上げられた位置になる
           // baseTotalDataはprincipalの上に積み上げられるため、basePoint.yはbaseTotalの位置
           const baseY = basePoint.y;
           // selectedTotalDataはbaseTotalの上に積み上げられるため、selectedPoint.yはselectedTotalの位置
           const selectedY = selectedPoint.y;
-          
+
           // X座標を取得（basePoint.xがNaNの場合はチャートのスケールから取得）
           let graphX = basePoint.x;
           if (isNaN(graphX) || graphX === undefined) {
@@ -714,54 +692,54 @@ export const drawGraph = async (canvas, interestRate, monthlyAmount, years) => {
               graphX = xScale.getPixelForValue(currentYears);
             }
           }
-          
+
           // 座標の検証（NaNチェック）
           if (isNaN(baseY) || isNaN(selectedY) || isNaN(graphX)) {
             return;
           }
-          
+
           // Canvas要素の位置を取得（コンテナからの相対位置を計算）
           const canvasRect = currentCanvas.getBoundingClientRect();
           const containerRect = currentContainer.getBoundingClientRect();
           const offsetX = canvasRect.left - containerRect.left;
           const offsetY = canvasRect.top - containerRect.top;
-          
+
           // offsetの検証
           if (isNaN(offsetX) || isNaN(offsetY)) {
             return;
           }
-          
+
           // 2%利率の税引後元利合計（ブルー）
           const baseValue = currentYearlyData[yearlyDataIndex]?.baseTotal || 0;
           const baseValueFormatted = baseValue.toLocaleString('ja-JP');
-          
+
           // 金額表示要素を作成（位置は後で設定）
           const baseLabel = document.createElement('div');
           baseLabel.className = 'graph-value-label graph-value-label--base';
-          
+
           // 説明テキスト要素を作成
           const baseDescription = document.createElement('div');
           baseDescription.className = 'graph-value-label__description graph-value-label__description--base';
           baseDescription.textContent = '利率2%で貯まるお金';
           baseLabel.appendChild(baseDescription);
-          
+
           // 金額要素を作成
           const baseAmount = document.createElement('div');
           baseAmount.className = 'graph-value-label__amount';
           baseAmount.innerHTML = `${baseValueFormatted}<span class="graph-value-label__unit">円</span>`;
           baseLabel.appendChild(baseAmount);
-          
+
           currentContainer.appendChild(baseLabel);
-          
+
           // 実線は.graph-value-label__amountの擬似要素として描画されるため、要素の作成は不要
           // 値の検証（NaNチェック）
           if (isNaN(baseY) || isNaN(selectedY) || isNaN(graphX) || isNaN(offsetX) || isNaN(offsetY) || !chartArea) {
             return;
           }
-          
+
           // baseLineは使用しないが、connectingLinesDataの互換性のためnullを設定
           const baseLine = null;
-          
+
           // 座標を設定（CSS変数でオフセット調整可能）
           const containerStyle = getComputedStyle(currentContainer);
           const getOffsetValue = (varName, defaultValue) => {
@@ -771,7 +749,7 @@ export const drawGraph = async (canvas, interestRate, monthlyAmount, years) => {
             const numValue = parseFloat(value.replace('px', ''));
             return isNaN(numValue) ? defaultValue : numValue;
           };
-          
+
           // ラベルの幅を測定（説明テキストと金額の両方を考慮）
           const tempCanvas = document.createElement('canvas');
           const tempCtx = tempCanvas.getContext('2d');
@@ -781,62 +759,62 @@ export const drawGraph = async (canvas, interestRate, monthlyAmount, years) => {
           const baseAmountText = `${baseValueFormatted}円`;
           const baseAmountWidth = tempCtx.measureText(baseAmountText).width;
           const labelWidth = Math.max(baseDescriptionWidth, baseAmountWidth);
-          
+
           // 金額ラベルをグラフエリアの左側に配置（縦軸と被らないように）
           const labelMargin = 10; // グラフエリアからのマージン
           const labelX = offsetX + chartArea.left + labelMargin;
-          
+
           // コンテナの高さを取得して、パーセンテージ位置を計算
           const containerHeight = currentContainer.offsetHeight || chart.height;
           const baseLabelYPercent = 35;
           const baseLabelY = (containerHeight * baseLabelYPercent) / 100;
-          
+
           // 金額ラベルの位置を更新（グラフエリアの左側、35%の位置に固定）
           baseLabel.style.setProperty('--label-y', `${baseLabelYPercent}%`);
           baseLabel.style.setProperty('--label-x', `${labelX}px`);
-          
+
           // 実線描画はアニメーション完了後に実行
-          
+
           // 選択利率の税引後元利合計（グリーン）
           const selectedValue = currentYearlyData[yearlyDataIndex]?.selectedTotal || 0;
           const selectedValueFormatted = selectedValue.toLocaleString('ja-JP');
-          
+
           // 金額表示要素を作成（位置は後で設定）
           const selectedLabel = document.createElement('div');
           selectedLabel.className = 'graph-value-label graph-value-label--selected';
-          
+
           // 説明テキスト要素を作成
           const selectedDescription = document.createElement('div');
           selectedDescription.className = 'graph-value-label__description graph-value-label__description--selected';
           selectedDescription.textContent = `利率${currentInterestRate}%で貯まるお金`;
           selectedLabel.appendChild(selectedDescription);
-          
+
           // 金額要素を作成
           const selectedAmount = document.createElement('div');
           selectedAmount.className = 'graph-value-label__amount';
           selectedAmount.innerHTML = `${selectedValueFormatted}<span class="graph-value-label__unit">円</span>`;
           selectedLabel.appendChild(selectedAmount);
-          
+
           currentContainer.appendChild(selectedLabel);
-          
+
           // ラベルの幅を測定（説明テキストと金額の両方を考慮）
           const selectedDescriptionText = `利率${currentInterestRate}%で貯まるお金`;
           const selectedDescriptionWidth = tempCtx.measureText(selectedDescriptionText).width;
           const selectedAmountText = `${selectedValueFormatted}円`;
           const selectedAmountWidth = tempCtx.measureText(selectedAmountText).width;
           const selectedLabelWidth = Math.max(selectedDescriptionWidth, selectedAmountWidth);
-          
+
           // 金額ラベルをグラフエリアの左側に配置（縦軸と被らないように）
           const selectedLabelX = labelX * 1.5;
-          
+
           // コンテナの高さを取得して、パーセンテージ位置を計算
           const selectedLabelYPercent = 10;
           const selectedLabelY = (containerHeight * selectedLabelYPercent) / 100;
-          
+
           // 金額ラベルの位置を更新（グラフエリアの左側、10%の位置に固定）
           selectedLabel.style.setProperty('--label-y', `${selectedLabelYPercent}%`);
           selectedLabel.style.setProperty('--label-x', `${selectedLabelX}px`);
-          
+
           // 実線描画はonCompleteコールバック内で直接要素を取得して実行するため、
           // connectingLinesDataへの保存は不要
         }

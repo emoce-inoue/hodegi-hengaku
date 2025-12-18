@@ -74,33 +74,24 @@ import { drawGraph } from './graph.js';
         return;
       }
 
-      const data = getSimulationData(
-        Number.parseInt(interestRate, 10),
-        Number.parseInt(monthlyAmount, 10),
-        Number.parseInt(savingsPeriod, 10)
-      );
+      const data = getSimulationData(Number.parseInt(interestRate, 10), Number.parseInt(monthlyAmount, 10), Number.parseInt(savingsPeriod, 10));
 
       if (!data) {
         return;
       }
 
       updateSimulationResult(data, savingsPeriod, monthlyAmount);
-      
+
       resultSection.style.display = 'block';
-      
+
       // グラフを描画（表示後に実行）
       if (elements.graph) {
         // 次のフレームで実行して、レイアウトが確定してから描画
         requestAnimationFrame(async () => {
-          await drawGraph(
-            elements.graph,
-            Number.parseInt(interestRate, 10),
-            Number.parseInt(monthlyAmount, 10),
-            Number.parseInt(savingsPeriod, 10)
-          );
+          await drawGraph(elements.graph, Number.parseInt(interestRate, 10), Number.parseInt(monthlyAmount, 10), Number.parseInt(savingsPeriod, 10));
         });
       }
-      
+
       resultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
     };
 
@@ -118,20 +109,20 @@ import { drawGraph } from './graph.js';
 (() => {
   const initPageTop = () => {
     const pageTopButton = document.querySelector('.js-page-top');
-    
+
     if (!pageTopButton) {
       return;
     }
-    
+
     pageTopButton.addEventListener('click', (event) => {
       event.preventDefault();
       window.scrollTo({
         top: 0,
-        behavior: 'smooth'
+        behavior: 'smooth',
       });
     });
   };
-  
+
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initPageTop);
   } else {

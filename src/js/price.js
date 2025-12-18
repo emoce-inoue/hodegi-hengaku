@@ -155,7 +155,7 @@ export const principalData = {
 
 // シミュレーションデータ
 // キー形式: {interestRate}_{monthlyAmount}_{year}
-// 
+//
 // 2%利率のデータ（baseTotalは利率に関係なく同じなので、2%利率として別管理）:
 //   - 各年: { baseTotal: 2%の税引後元利合計 }
 //
@@ -1241,27 +1241,27 @@ export const simulationData = {
 export function getSimulationData(interestRate, monthlyAmount, years) {
   const key = `${interestRate}_${monthlyAmount}_${years}`;
   const selectedData = simulationData[key];
-  
+
   if (!selectedData) {
     return null;
   }
-  
+
   // 2%利率のデータからbaseTotalを取得
   const baseKey = `2_${monthlyAmount}_${years}`;
   const baseData = simulationData[baseKey];
-  
+
   if (!baseData) {
     return null;
   }
-  
+
   // principalDataからprincipalを取得
   const principalKey = `${monthlyAmount}_${years}`;
   const principal = principalData[principalKey];
-  
+
   if (principal === undefined) {
     return null;
   }
-  
+
   return {
     principal,
     baseTotal: baseData.baseTotal,
@@ -1279,7 +1279,7 @@ export function getSimulationData(interestRate, monthlyAmount, years) {
  */
 export function getYearlyData(interestRate, monthlyAmount, years) {
   const data = [];
-  
+
   // 0年目のデータ
   data.push({
     year: 0,
@@ -1287,30 +1287,30 @@ export function getYearlyData(interestRate, monthlyAmount, years) {
     baseTotal: 0,
     selectedTotal: 0,
   });
-  
+
   // 1年目から最終年までのデータを取得
   for (let year = 1; year <= years; year++) {
     // 2%利率のデータからbaseTotalを取得
     const baseKey = `2_${monthlyAmount}_${year}`;
     const baseData = simulationData[baseKey];
-    
+
     if (!baseData) {
       // 2%利率のデータがない場合はスキップ
       continue;
     }
-    
+
     // principalDataからprincipalを取得
     const principalKey = `${monthlyAmount}_${year}`;
     const principal = principalData[principalKey];
-    
+
     if (principal === undefined) {
       continue;
     }
-    
+
     // 選択利率のデータからselectedTotalを取得
     const selectedKey = `${interestRate}_${monthlyAmount}_${year}`;
     const selectedData = simulationData[selectedKey];
-    
+
     if (interestRate === 2) {
       // 2%利率の場合はbaseTotalをselectedTotalとして使用
       data.push({
@@ -1332,11 +1332,11 @@ export function getYearlyData(interestRate, monthlyAmount, years) {
       const prevYear = year - 1;
       const prevSelectedKey = `${interestRate}_${monthlyAmount}_${prevYear}`;
       const prevSelectedData = simulationData[prevSelectedKey];
-      
+
       // 最終年のデータを取得
       const finalSelectedKey = `${interestRate}_${monthlyAmount}_${years}`;
       const finalSelectedData = simulationData[finalSelectedKey];
-      
+
       if (prevSelectedData && finalSelectedData) {
         // 線形補間
         const progress = year / years;
@@ -1360,7 +1360,7 @@ export function getYearlyData(interestRate, monthlyAmount, years) {
       }
     }
   }
-  
+
   return data;
 }
 
@@ -1374,10 +1374,10 @@ export const startCountUpAnimation = (targetElem, to, duration = 1000) => {
   if (!targetElem) {
     return;
   }
-  
+
   const from = 0;
   const startTime = performance.now();
-  
+
   const countUp = () => {
     const elapsed = performance.now() - startTime;
     const countValue = from + (elapsed / duration) * (to - from);
@@ -1388,6 +1388,6 @@ export const startCountUpAnimation = (targetElem, to, duration = 1000) => {
       requestAnimationFrame(countUp);
     }
   };
-  
+
   requestAnimationFrame(countUp);
 };
