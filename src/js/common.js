@@ -1,4 +1,4 @@
-import { getSimulationData, formatNumber, startCountUpAnimation } from './price.js';
+import { getSimulationData, startCountUpAnimation } from './price.js';
 import { drawGraph } from './graph.js';
 
 (() => {

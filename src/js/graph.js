@@ -12,8 +12,8 @@ let imagePatternLoading = false;
 /**
  * 画像パターンを事前に読み込む
  */
-const loadImagePattern = (ctx, imageUrl) => {
-  return new Promise((resolve) => {
+const loadImagePattern = (ctx, imageUrl) =>
+  new Promise((resolve) => {
     if (cachedImagePattern) {
       resolve(cachedImagePattern);
       return;
@@ -55,7 +55,7 @@ const loadImagePattern = (ctx, imageUrl) => {
         resolve(cachedImagePattern);
       }
     };
-    img.onerror = (error) => {
+    img.onerror = () => {
       if (!resolved) {
         resolved = true;
         clearTimeout(timeout);
@@ -66,7 +66,6 @@ const loadImagePattern = (ctx, imageUrl) => {
     // パスを試す: まず相対パス、次に絶対パス
     img.src = imageUrl;
   });
-};
 
 /**
  * Y軸の最大値と刻みを計算
@@ -111,7 +110,7 @@ const calculateYAxis = (maxValue) => {
 /**
  * 実線を描画する関数（アニメーション完了後に呼び出される）
  */
-const drawConnectingLines = (chart, container, canvas, yearlyData, interestRate, years, baseLabel, selectedLabel, baseLine, selectedLine, baseY, selectedY, selectedIndex, labelX, containerHeight) => {
+const drawConnectingLines = (chart, container, canvas, yearlyData, interestRate, years, baseLabel, selectedLabel, baseLine, selectedLine, baseY, selectedY, selectedIndex) => {
   // 要素が確実に存在するまで待機してから実行
   const trySetLines = (retryCount = 0) => {
     const baseAmountElement = baseLabel.querySelector('.graph-value-label__amount');
@@ -275,7 +274,6 @@ export const drawGraph = async (canvas, interestRate, monthlyAmount, years) => {
   const yAxis = calculateYAxis(maxValue);
   // yAxis.maxをstepの倍数に丸める（Chart.jsが自動で追加ティックを生成しないようにする）
   yAxis.max = Math.ceil(yAxis.max / yAxis.step) * yAxis.step;
-  const maxY = yAxis.max * 10000; // 円単位に戻す
 
   // データを準備（積み上げチャート用に差分を計算）
   const principalData = [];
@@ -338,9 +336,9 @@ export const drawGraph = async (canvas, interestRate, monthlyAmount, years) => {
       responsive: true,
       maintainAspectRatio: true,
       // interestRate、yearlyData、yearsをoptionsに保存してプラグインから参照できるようにする
-      interestRate: interestRate,
-      yearlyData: yearlyData,
-      years: years,
+      interestRate,
+      yearlyData,
+      years,
       layout: {
         padding: {
           left: 5, // Y軸ラベルの幅を確保
@@ -401,9 +399,7 @@ export const drawGraph = async (canvas, interestRate, monthlyAmount, years) => {
           beginAtZero: true,
           max: yAxis.max,
           ticks: {
-            callback: (value) => {
-              return String(value);
-            },
+            callback: (value) => String(value),
             padding: 10, // ティックラベルのパディング（左右の余白）
             font: {
               size: 10, // フォントサイズ（調整可能）
@@ -441,10 +437,7 @@ export const drawGraph = async (canvas, interestRate, monthlyAmount, years) => {
           type: 'number',
           easing: 'easeOutQuart', // 滑らかなイージングに変更
           duration: 600, // アニメーション時間を長くして滑らかに
-          from: (ctx) => {
-            // Y軸の0から開始
-            return ctx.chart.scales.y.getPixelForValue(0);
-          },
+          from: (ctx) => ctx.chart.scales.y.getPixelForValue(0),
           delay(ctx) {
             if (ctx.type !== 'data' || ctx.yStarted) {
               return 0;
@@ -503,7 +496,7 @@ export const drawGraph = async (canvas, interestRate, monthlyAmount, years) => {
                 const baseY = basePoint.y;
                 const selectedY = selectedPoint.y;
 
-                drawConnectingLines(currentChart, currentContainer, currentCanvas, currentYearlyData, currentInterestRate, currentYears, baseLabel, selectedLabel, null, null, baseY, selectedY, selectedIndex, 0, 0);
+                drawConnectingLines(currentChart, currentContainer, currentCanvas, currentYearlyData, currentInterestRate, currentYears, baseLabel, selectedLabel, null, null, baseY, selectedY, selectedIndex);
               }
             } else if (retryCount < 20) {
               // 要素がまだ存在しない場合は再試行（最大20回、約1秒）
@@ -737,29 +730,6 @@ export const drawGraph = async (canvas, interestRate, monthlyAmount, years) => {
             return;
           }
 
-          // baseLineは使用しないが、connectingLinesDataの互換性のためnullを設定
-          const baseLine = null;
-
-          // 座標を設定（CSS変数でオフセット調整可能）
-          const containerStyle = getComputedStyle(currentContainer);
-          const getOffsetValue = (varName, defaultValue) => {
-            const value = containerStyle.getPropertyValue(varName).trim();
-            if (!value) return defaultValue;
-            // px単位を除去して数値に変換
-            const numValue = parseFloat(value.replace('px', ''));
-            return isNaN(numValue) ? defaultValue : numValue;
-          };
-
-          // ラベルの幅を測定（説明テキストと金額の両方を考慮）
-          const tempCanvas = document.createElement('canvas');
-          const tempCtx = tempCanvas.getContext('2d');
-          tempCtx.font = 'bold 14px sans-serif';
-          const baseDescriptionText = '利率2%で貯まるお金';
-          const baseDescriptionWidth = tempCtx.measureText(baseDescriptionText).width;
-          const baseAmountText = `${baseValueFormatted}円`;
-          const baseAmountWidth = tempCtx.measureText(baseAmountText).width;
-          const labelWidth = Math.max(baseDescriptionWidth, baseAmountWidth);
-
           // 金額ラベルをグラフエリアの左側に配置（縦軸と被らないように）
           const labelMargin = 10; // グラフエリアからのマージン
           const labelX = offsetX + chartArea.left + labelMargin;
@@ -767,7 +737,6 @@ export const drawGraph = async (canvas, interestRate, monthlyAmount, years) => {
           // コンテナの高さを取得して、パーセンテージ位置を計算
           const containerHeight = currentContainer.offsetHeight || chart.height;
           const baseLabelYPercent = 35;
-          const baseLabelY = (containerHeight * baseLabelYPercent) / 100;
 
           // 金額ラベルの位置を更新（グラフエリアの左側、35%の位置に固定）
           baseLabel.style.setProperty('--label-y', `${baseLabelYPercent}%`);
@@ -797,19 +766,11 @@ export const drawGraph = async (canvas, interestRate, monthlyAmount, years) => {
 
           currentContainer.appendChild(selectedLabel);
 
-          // ラベルの幅を測定（説明テキストと金額の両方を考慮）
-          const selectedDescriptionText = `利率${currentInterestRate}%で貯まるお金`;
-          const selectedDescriptionWidth = tempCtx.measureText(selectedDescriptionText).width;
-          const selectedAmountText = `${selectedValueFormatted}円`;
-          const selectedAmountWidth = tempCtx.measureText(selectedAmountText).width;
-          const selectedLabelWidth = Math.max(selectedDescriptionWidth, selectedAmountWidth);
-
           // 金額ラベルをグラフエリアの左側に配置（縦軸と被らないように）
           const selectedLabelX = labelX * 1.5;
 
           // コンテナの高さを取得して、パーセンテージ位置を計算
           const selectedLabelYPercent = 10;
-          const selectedLabelY = (containerHeight * selectedLabelYPercent) / 100;
 
           // 金額ラベルの位置を更新（グラフエリアの左側、10%の位置に固定）
           selectedLabel.style.setProperty('--label-y', `${selectedLabelYPercent}%`);
