@@ -1,10 +1,12 @@
 :root {
   /* font */
   --font-sans: 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', meiryo, sans-serif;
+  --font-zenmaru: 'Zen Maru Gothic', 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', meiryo, sans-serif;
   --base-text-unit: 16;
   --rem-ratio: calc(1rem / var(--base-text-unit));
   --font-normal: 400;
   --font-medium: 500;
+  --font-semibold: 600;
   --font-bold: 700;
   --leading-initial: 1;
   --leading-tight: 1.3;
@@ -19,22 +21,50 @@
 
   /* size */
   --layout-width-min: 375;
+  --layout-width-middle: 750;
   --layout-width-max: 1440;
   --fluid-ratio-min: calc(1 / var(--layout-width-min) * 100dvi);
   --fluid-ratio-max: calc(1 / var(--layout-width-max) * 100dvi);
   --aspect-video: 16/9;
   --aspect-thumbnail: 1.91/1;
-  --rounded-xs: 2px;
-  --rounded-s: 4px;
+  --rounded-xs: 5px;
+  --rounded-s: 7px;
   --rounded-m: 8px;
   --rounded-sl: 10px;
   --rounded-l: 30px;
+  --rounded-infinity: calc(infinity * 1px);
 
   /* color */
   --color-grayscale-0: #fff;
-  --color-grayscale-1000: #000;
+  --color-grayscale-100: #eaeaea;
+  --color-grayscale-200: #dfdfd5;
+  --color-grayscale-300: #989898;
+  --color-grayscale-900: #515252;
+  --color-grayscale-1000: #3c3c3c;
+  --color-greenscale-100: #ecf7f8;
+  --color-greenscale-200: #d8f1ed;
+  --color-greenscale-300: #ccece7;
+  --color-greenscale-400: #bcdbd6;
+  --color-greenscale-500: #bed0cd;
+  --color-greenscale-600: #94d1c7;
+  --color-greenscale-700: #5eded5;
+  --color-greenscale-800: #5baea1;
+  --color-greenscale-850: #27ac98;
+  --color-greenscale-900: #49897f;
+  --color-greenscale-1000: #44ad9d;
+  --color-greenscale-1050: #459B8D;
+  --color-greenscale-1100: #11a59a;
+  --color-bluescale-100: #d5efff;
+  --color-bluescale-200: #3e8eb5;
+  --color-yellowscale-100: #fdfce2;
+  --color-yellowscale-200: #e6e5c3;
+  --color-yellowscale-300: #faffbb;
+  --color-orangescale-50: #f8cd75;
+  --color-orangescale-100: #f29e08;
+  --color-orangescale-200: #D98B00;
+  --color-brownscale-100: #6f6e6d;
   --background-base: var(--color-grayscale-0);
-  --font-base: var(--color-grayscale-100);
+  --font-base: var(--color-greenscale-900);
   --underline-base: color-mix(in srgb, currentcolor, transparent 40%);
 
   /* z-index */

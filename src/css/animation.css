@@ -16,6 +16,21 @@
   animation: fadein 1s ease-out forwards;
 }
 
+.animation-delay-normal {
+  /* stylelint-disable-next-line declaration-no-important */
+  animation-delay: var(--speed-normal) !important;
+}
+
+.animation-delay-slow {
+  /* stylelint-disable-next-line declaration-no-important */
+  animation-delay: var(--speed-slow) !important;
+}
+
+.animation-delay-over-slow {
+  /* stylelint-disable-next-line declaration-no-important */
+  animation-delay: var(--speed-over-slow) !important;
+}
+
 @keyframes fade {
   from {
     opacity: 0;
