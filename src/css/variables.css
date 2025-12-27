@@ -52,6 +52,7 @@
   --color-greenscale-850: #27ac98;
   --color-greenscale-900: #49897f;
   --color-greenscale-1000: #44ad9d;
+  --color-greenscale-1050: #459B8D;
   --color-greenscale-1100: #11a59a;
   --color-bluescale-100: #d5efff;
   --color-bluescale-200: #3e8eb5;
@@ -60,6 +61,7 @@
   --color-yellowscale-300: #faffbb;
   --color-orangescale-50: #f8cd75;
   --color-orangescale-100: #f29e08;
+  --color-orangescale-200: #D98B00;
   --color-brownscale-100: #6f6e6d;
   --background-base: var(--color-grayscale-0);
   --font-base: var(--color-greenscale-900);
